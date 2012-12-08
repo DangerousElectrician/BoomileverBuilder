@@ -1,4 +1,5 @@
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 public class Simulator {	
@@ -150,14 +151,16 @@ public class Simulator {
 			cookieList = nodeLinkTypeConnect.get(node2);
 			cookieList.add(new Integer(node1));
 			nodeLinkTypeConnect.set(node2, cookieList);
-			return (beamLink.size()-1);			
+			return (beamLink.size()-1);
 		}
-		return -1;
+		return -99;
 	}
 	
 	private static boolean isNotInList(int value, LinkedList<Integer> list) {
-		for (Integer brownie : list) {
-			if(brownie.intValue() == value) {
+		Iterator<Integer> brownie = list.iterator();
+		brownie.next();
+		while(brownie.hasNext()) {
+			if(brownie.next() == value) {
 				return false;
 			}
 		}
@@ -256,14 +259,36 @@ public class Simulator {
 		System.out.println("");
 		for (Integer v : specialNodes) {
 			System.out.print(v+": ");	
-			for (int i = 0; i < nodeTypeConnect[v].length; i++) {
+			for (int i = 1; i < nodeTypeConnect[v].length; i++) {
 				System.out.print(nodeTypeConnect[v][i]+" ");
-				
+				double angle = composeVector(getNodeX(nodeTypeConnect[v][i]), getNodeY(nodeTypeConnect[v][i]), getNodeX(v), getNodeY(v))[0];
+				double force = 3.14159;
+				setNodeLinkForce(nodeTypeConnect[v][i], force, angle*-1);
 			}
 			System.out.println("");
 		}		
 	}
 
+	private static double[] vectorAdd(double angle1, double magnitude1, double angle2, double magnitude2) {
+		double[] vector1 = decomposeVector(angle1, magnitude1);
+		double[] vector2 = decomposeVector(angle2, magnitude2);
+		
+		return new double[] {Math.atan2( (vector1[1]+vector2[1]), (vector1[0]+vector2[0]) ), 
+				magnitude(vector1[0]+vector2[0], vector1[1]+vector2[1])};
+	}
+	
+	private static double magnitude(double x, double y) {
+		return Math.sqrt(Math.pow((x+y), 2));
+	}
+	
+	private static double[] decomposeVector(double angle, double magnitude) {
+		return new double[] {Math.cos(angle)*magnitude, Math.sin(angle)*magnitude};
+	}
+	
+	private static double[] composeVector(double x1, double y1, double x2, double y2) {
+		return new double[] {Math.atan((y2-y1)/(x2-x1)), magnitude(x2-x1, y2-y1)};
+	}
+	
 	private static void printArray(double[] array) {
 		/*for (int i = 0; i < array.length; i++) {
 			System.out.print(array[i]+" ");

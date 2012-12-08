@@ -6,7 +6,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -47,8 +46,8 @@ public class ControlWindow extends JFrame {
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	private JPanel panelNode;
 	private JPanel panelBeam;
-	private JPanel panel_3;
-	private Panel panelDraw;
+	private JPanel panelActionLog;
+	private JPanel panelDraw;
 	private JPanel panelNodeCoords;
 	private JLabel lblX;
 	private JLabel lblY;
@@ -75,6 +74,18 @@ public class ControlWindow extends JFrame {
 	private JLabel lblBeam;
 	private JSpinner spinner;
 	private JButton btnSimulate;
+	private JPanel nodeInfo;
+	private JPanel infoDisp;
+	private JLabel lblX_1;
+	private static JLabel lblXinfo;
+	private JLabel lblY_1;
+	private static JLabel lblYinfo;
+	private JLabel lblForce_1;
+	private JLabel lblAngle_1;
+	private static JLabel lblForceInfo;
+	private static JLabel lblAngleInfo;
+	private JLabel lblNode_1;
+	private static JLabel lblNodeInfo;
 
 	//begin methods
 	
@@ -131,14 +142,34 @@ public class ControlWindow extends JFrame {
 		spinY.setValue(new Double(y));
 	}
 
-	public static void setSpinForceY(double forceY) {
-		spinAngle.setValue(new Double(forceY));
+	public static void setSpinAngle(double angle) {
+		spinAngle.setValue(new Double(Math.toDegrees(angle)));
 	}
 	
-	public static void setSpinForceX(double forceX) {
-		spinForce.setValue(new Double(forceX));
+	public static void setSpinForceX(double force) {
+		spinForce.setValue(new Double(force));
 	}
 
+	public static void setInfoX(double x) {
+		lblXinfo.setText(Double.toString(x));
+	}
+	
+	public static void setInfoY(double x) {
+		lblYinfo.setText(Double.toString(x));
+	}
+	
+	public static void setInfoForce(double x) {
+		lblForceInfo.setText(Double.toString(x));
+	}
+	
+	public static void setInfoAngle(double x) {
+		lblAngleInfo.setText(Double.toString(x));
+	}
+	
+	public static void setInfoNode(int node) {
+		lblNodeInfo.setText(Integer.toString(node));
+	}
+	
 	public ControlWindow() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //		setBounds(0, 0, 1300, 700);
@@ -147,10 +178,10 @@ public class ControlWindow extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
-		gbl_contentPane.columnWidths = new int[] {978, -30, 42, 55, 37, 31, 43};
-		gbl_contentPane.rowHeights = new int[] {0, 58, 61, 38, 91, 57, 135, 23, 40, 101};
-		gbl_contentPane.columnWeights = new double[]{1.0, 0.0, 0.0, 0.0};
-		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0};
+		gbl_contentPane.columnWidths = new int[] {978, -30, 0, 59, 35, 37, 55, 13};
+		gbl_contentPane.rowHeights = new int[] {0, 58, 61, 38, 101, 48, 0, 15, -79, 100};
+		gbl_contentPane.columnWeights = new double[]{1.0, 1.0, 0.0, 0.0, 0.0};
+		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0};
 		contentPane.setLayout(gbl_contentPane);
 		
 		panelDraw = new OutputTest();
@@ -189,7 +220,7 @@ public class ControlWindow extends JFrame {
 		gbc_tabbedPane.fill = GridBagConstraints.BOTH;
 		gbc_tabbedPane.gridheight = 5;
 		gbc_tabbedPane.gridwidth = 6;
-		gbc_tabbedPane.insets = new Insets(0, 0, 5, 0);
+		gbc_tabbedPane.insets = new Insets(0, 0, 5, 5);
 		gbc_tabbedPane.gridx = 1;
 		gbc_tabbedPane.gridy = 1;
 		contentPane.add(tabbedPane, gbc_tabbedPane);
@@ -220,7 +251,7 @@ public class ControlWindow extends JFrame {
 		tabbedPane.setMnemonicAt(0, KeyEvent.VK_N);
 		GridBagLayout gbl_panelNode = new GridBagLayout();
 		gbl_panelNode.columnWidths = new int[] {16, 54, 43, 20, 20, 20};
-		gbl_panelNode.rowHeights = new int[] {10, 28, 0, 49, 57, 30, 30};
+		gbl_panelNode.rowHeights = new int[] {10, 28, 0, 49, 57};
 		gbl_panelNode.columnWeights = new double[]{0.0, 1.0, 1.0, 0.0};
 		gbl_panelNode.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0};
 		panelNode.setLayout(gbl_panelNode);
@@ -369,12 +400,12 @@ public class ControlWindow extends JFrame {
 		panelNodeCoords.add(lblAngle, gbc_lblAngle);
 		
 		spinAngle = new JSpinner();
-		spinAngle.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(0.01745329251)));
+		spinAngle.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
 		spinAngle.addChangeListener(new ChangeListener() {
 			
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				Simulator.setNodeLink(OutputTest.selectNode, Simulator.ANGLE, ((Double) spinAngle.getModel().getValue()).doubleValue());
+				Simulator.setNodeLink(OutputTest.selectNode, Simulator.ANGLE, (Math.toRadians((Double) spinAngle.getModel().getValue())));
 			}
 		});
 		GridBagConstraints gbc_spinAngle = new GridBagConstraints();
@@ -460,7 +491,7 @@ public class ControlWindow extends JFrame {
 		});
 		btnDelete.setMnemonic('d');
 		GridBagConstraints gbc_btnDelete = new GridBagConstraints();
-		gbc_btnDelete.insets = new Insets(0, 0, 5, 5);
+		gbc_btnDelete.insets = new Insets(0, 0, 0, 5);
 		gbc_btnDelete.gridx = 1;
 		gbc_btnDelete.gridy = 4;
 		panelNode.add(btnDelete, gbc_btnDelete);
@@ -504,8 +535,28 @@ public class ControlWindow extends JFrame {
 		panel.add(spinner, gbc_spinner);
 		tabbedPane.setMnemonicAt(1, KeyEvent.VK_B);
 		
-		panel_3 = new JPanel();
-		tabbedPane.addTab("New tab", null, panel_3, null);
+		panelActionLog = new JPanel();
+		tabbedPane.addTab("Log", null, panelActionLog, null);
+		GridBagLayout gbl_panelActionLog = new GridBagLayout();
+		gbl_panelActionLog.columnWidths = new int[]{222, 0};
+		gbl_panelActionLog.rowHeights = new int[]{57, 0};
+		gbl_panelActionLog.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gbl_panelActionLog.rowWeights = new double[]{1.0, Double.MIN_VALUE};
+		panelActionLog.setLayout(gbl_panelActionLog);
+		
+
+		JScrollPane scrollPaneOutput = new JScrollPane(textAreaOutput);
+		GridBagConstraints gbc_scrollPaneOutput = new GridBagConstraints();
+		gbc_scrollPaneOutput.fill = GridBagConstraints.BOTH;
+		gbc_scrollPaneOutput.gridx = 0;
+		gbc_scrollPaneOutput.gridy = 0;
+		panelActionLog.add(scrollPaneOutput, gbc_scrollPaneOutput);
+		scrollPaneOutput.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		textAreaOutput.setRows(3);
+		textAreaOutput.setFont(new Font("Monospaced", Font.PLAIN, 12));
+		textAreaOutput.setEditable(false);
+		
+				contentPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{tabbedPane, panelModeSelect, rdbtnAddNode, rdbtnAddBeam, scrollPaneOutput, textAreaOutput}));
 		
 		btnSimulate = new JButton("Simulate");
 		btnSimulate.setMnemonic('a');
@@ -519,18 +570,19 @@ public class ControlWindow extends JFrame {
 		});
 		GridBagConstraints gbc_btnSimulate = new GridBagConstraints();
 		gbc_btnSimulate.insets = new Insets(0, 0, 5, 5);
-		gbc_btnSimulate.gridx = 2;
-		gbc_btnSimulate.gridy = 7;
+		gbc_btnSimulate.gridx = 3;
+		gbc_btnSimulate.gridy = 6;
 		contentPane.add(btnSimulate, gbc_btnSimulate);
 		
 		panelModeSelect = new JPanel();
 		panelModeSelect.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagConstraints gbc_panelModeSelect = new GridBagConstraints();
-		gbc_panelModeSelect.gridwidth = 5;
-		gbc_panelModeSelect.insets = new Insets(0, 0, 5, 5);
-		gbc_panelModeSelect.fill = GridBagConstraints.BOTH;
-		gbc_panelModeSelect.gridx = 1;
-		gbc_panelModeSelect.gridy = 8;
+		gbc_panelModeSelect.anchor = GridBagConstraints.NORTH;
+		gbc_panelModeSelect.gridwidth = 6;
+		gbc_panelModeSelect.insets = new Insets(0, 0, 5, 0);
+		gbc_panelModeSelect.fill = GridBagConstraints.HORIZONTAL;
+		gbc_panelModeSelect.gridx = 2;
+		gbc_panelModeSelect.gridy = 7;
 		contentPane.add(panelModeSelect, gbc_panelModeSelect);
 		
 		rdbtnAddNode = new JRadioButton("Add Node");
@@ -560,20 +612,125 @@ public class ControlWindow extends JFrame {
 			}
 		});
 		
-
-		JScrollPane scrollPaneOutput = new JScrollPane(textAreaOutput);
-		scrollPaneOutput.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		GridBagConstraints gbc_scrollPaneOutput = new GridBagConstraints();
-		gbc_scrollPaneOutput.fill = GridBagConstraints.BOTH;
-		gbc_scrollPaneOutput.gridwidth = 6;
-		gbc_scrollPaneOutput.gridx = 1;
-		gbc_scrollPaneOutput.gridy = 9;
-		contentPane.add(scrollPaneOutput, gbc_scrollPaneOutput);
-		textAreaOutput.setRows(3);
-		textAreaOutput.setFont(new Font("Monospaced", Font.PLAIN, 12));
-		textAreaOutput.setEditable(false);
-
-		contentPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{tabbedPane, panelModeSelect, rdbtnAddNode, rdbtnAddBeam, scrollPaneOutput, textAreaOutput}));
+		nodeInfo = new JPanel();
+		nodeInfo.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		GridBagConstraints gbc_nodeInfo = new GridBagConstraints();
+		gbc_nodeInfo.gridwidth = 7;
+		gbc_nodeInfo.gridheight = 2;
+		gbc_nodeInfo.fill = GridBagConstraints.BOTH;
+		gbc_nodeInfo.gridx = 1;
+		gbc_nodeInfo.gridy = 8;
+		contentPane.add(nodeInfo, gbc_nodeInfo);
+		GridBagLayout gbl_nodeInfo = new GridBagLayout();
+		gbl_nodeInfo.columnWidths = new int[]{0, 0, 0, 0};
+		gbl_nodeInfo.rowHeights = new int[]{0, 0, 0};
+		gbl_nodeInfo.columnWeights = new double[]{0.0, 1.0, 0.0, Double.MIN_VALUE};
+		gbl_nodeInfo.rowWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
+		nodeInfo.setLayout(gbl_nodeInfo);
+		
+		infoDisp = new JPanel();
+		infoDisp.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		GridBagConstraints gbc_infoDisp = new GridBagConstraints();
+		gbc_infoDisp.insets = new Insets(0, 0, 5, 5);
+		gbc_infoDisp.fill = GridBagConstraints.BOTH;
+		gbc_infoDisp.gridx = 1;
+		gbc_infoDisp.gridy = 0;
+		nodeInfo.add(infoDisp, gbc_infoDisp);
+		GridBagLayout gbl_infoDisp = new GridBagLayout();
+		gbl_infoDisp.columnWidths = new int[]{60, 35, 36, 32, 0};
+		gbl_infoDisp.rowHeights = new int[]{0, 14, 0, 0};
+		gbl_infoDisp.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_infoDisp.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		infoDisp.setLayout(gbl_infoDisp);
+		
+		lblNode_1 = new JLabel("Node: ");
+		lblNode_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		GridBagConstraints gbc_lblNode_1 = new GridBagConstraints();
+		gbc_lblNode_1.anchor = GridBagConstraints.EAST;
+		gbc_lblNode_1.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNode_1.gridx = 0;
+		gbc_lblNode_1.gridy = 0;
+		infoDisp.add(lblNode_1, gbc_lblNode_1);
+		
+		lblNodeInfo = new JLabel("0");
+		lblNodeInfo.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		GridBagConstraints gbc_lblNodeInfo = new GridBagConstraints();
+		gbc_lblNodeInfo.anchor = GridBagConstraints.WEST;
+		gbc_lblNodeInfo.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNodeInfo.gridx = 1;
+		gbc_lblNodeInfo.gridy = 0;
+		infoDisp.add(lblNodeInfo, gbc_lblNodeInfo);
+		
+		lblX_1 = new JLabel("X: ");
+		lblX_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		GridBagConstraints gbc_lblX_1 = new GridBagConstraints();
+		gbc_lblX_1.anchor = GridBagConstraints.EAST;
+		gbc_lblX_1.insets = new Insets(0, 0, 5, 5);
+		gbc_lblX_1.gridx = 0;
+		gbc_lblX_1.gridy = 1;
+		infoDisp.add(lblX_1, gbc_lblX_1);
+		
+		lblXinfo = new JLabel("0");
+		lblXinfo.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		GridBagConstraints gbc_lblXinfo = new GridBagConstraints();
+		gbc_lblXinfo.insets = new Insets(0, 0, 5, 5);
+		gbc_lblXinfo.anchor = GridBagConstraints.WEST;
+		gbc_lblXinfo.gridx = 1;
+		gbc_lblXinfo.gridy = 1;
+		infoDisp.add(lblXinfo, gbc_lblXinfo);
+		
+		lblForce_1 = new JLabel("Force: ");
+		lblForce_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		GridBagConstraints gbc_lblForce_1 = new GridBagConstraints();
+		gbc_lblForce_1.anchor = GridBagConstraints.EAST;
+		gbc_lblForce_1.insets = new Insets(0, 0, 5, 5);
+		gbc_lblForce_1.gridx = 2;
+		gbc_lblForce_1.gridy = 1;
+		infoDisp.add(lblForce_1, gbc_lblForce_1);
+		
+		lblForceInfo = new JLabel("0");
+		lblForceInfo.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		GridBagConstraints gbc_lblForceInfo = new GridBagConstraints();
+		gbc_lblForceInfo.anchor = GridBagConstraints.WEST;
+		gbc_lblForceInfo.insets = new Insets(0, 0, 5, 0);
+		gbc_lblForceInfo.gridx = 3;
+		gbc_lblForceInfo.gridy = 1;
+		infoDisp.add(lblForceInfo, gbc_lblForceInfo);
+		
+		lblY_1 = new JLabel("Y: ");
+		lblY_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		GridBagConstraints gbc_lblY_1 = new GridBagConstraints();
+		gbc_lblY_1.anchor = GridBagConstraints.EAST;
+		gbc_lblY_1.insets = new Insets(0, 0, 0, 5);
+		gbc_lblY_1.gridx = 0;
+		gbc_lblY_1.gridy = 2;
+		infoDisp.add(lblY_1, gbc_lblY_1);
+		
+		lblYinfo = new JLabel("0");
+		lblYinfo.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		GridBagConstraints gbc_lblYinfo = new GridBagConstraints();
+		gbc_lblYinfo.anchor = GridBagConstraints.WEST;
+		gbc_lblYinfo.insets = new Insets(0, 0, 0, 5);
+		gbc_lblYinfo.gridx = 1;
+		gbc_lblYinfo.gridy = 2;
+		infoDisp.add(lblYinfo, gbc_lblYinfo);
+		
+		lblAngle_1 = new JLabel("Angle: ");
+		lblAngle_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		GridBagConstraints gbc_lblAngle_1 = new GridBagConstraints();
+		gbc_lblAngle_1.anchor = GridBagConstraints.EAST;
+		gbc_lblAngle_1.insets = new Insets(0, 0, 0, 5);
+		gbc_lblAngle_1.gridx = 2;
+		gbc_lblAngle_1.gridy = 2;
+		infoDisp.add(lblAngle_1, gbc_lblAngle_1);
+		
+		lblAngleInfo = new JLabel("0");
+		lblAngleInfo.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		GridBagConstraints gbc_lblAngleInfo = new GridBagConstraints();
+		gbc_lblAngleInfo.anchor = GridBagConstraints.WEST;
+		gbc_lblAngleInfo.gridx = 3;
+		gbc_lblAngleInfo.gridy = 2;
+		infoDisp.add(lblAngleInfo, gbc_lblAngleInfo);
 	}
 
 }
