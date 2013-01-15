@@ -37,6 +37,7 @@ implements MouseInputListener{
 
 	Stroke drawingStroke = new BasicStroke(2);
 
+	@Override
 	public void paintComponent(Graphics g) {
 		addMouseMotionListener(this);
 		addMouseListener(this);
@@ -60,17 +61,17 @@ implements MouseInputListener{
 			if (nodeType!=-1) {
 				int x=gridX(Simulator.getNodeLink(i, Simulator.X));
 				int y=gridY(Simulator.getNodeLink(i, Simulator.Y));
-				
+
 				graph.setColor(Color.green);
-				g.drawLine(x, y, (int)(x+Math.cos(Simulator.getNodeLink(i, Simulator.ANGLE))*300),
-						(int)(y+Math.sin(Simulator.getNodeLink(i, Simulator.ANGLE))*300));
+				g.drawLine(x, y, (int)(x+Math.cos(Simulator.getNodeLink(i, Simulator.ANGLE)*-1)*30),
+						(int)(y+Math.sin(Simulator.getNodeLink(i, Simulator.ANGLE)*-1)*30));
 
 				if (i == selectNode || i == highLightNode) {
 					//nodeColor = new Color(nodeColor.getBlue(), nodeColor.getRed(), nodeColor.getGreen());
 					graph.setColor(Color.red);
 					graph.fillOval(x-circleSelectCenter, y-circleSelectCenter, circleSelectSize, circleSelectSize);
 				}
-				
+
 				Color nodeColor;
 				if (nodeType == Simulator.TYPE_FIXED_NODE){
 					nodeColor = Color.black;
@@ -85,8 +86,8 @@ implements MouseInputListener{
 				graph.setColor(nodeColor);
 				graph.drawString(Integer.toString(i), x+6-circleCenter, y-circleCenter);
 				graph.fillOval(x-circleCenter, y-circleCenter, circleSize, circleSize);
-			}			
-		}		
+			}
+		}
 	}
 
 	public static int gridY(double coordinate) {
@@ -185,7 +186,7 @@ implements MouseInputListener{
 								beamNode[0]=foo;
 								selectNodePrint(foo, true);
 							}
-						}						
+						}
 					}
 				}
 
@@ -200,7 +201,7 @@ implements MouseInputListener{
 							beamNodeIndex=1;
 						} else {
 							addBeamPrint(beamNode[0], foo);
-						}						
+						}
 					} else {
 						selectNode=-1;
 						beamNode[0]=-1;
@@ -212,15 +213,15 @@ implements MouseInputListener{
 			repaint();
 			prevTime=e.getWhen()+100;
 
-		} 
+		}
 	}
-	 
+
 
 	public void addBeamPrint(int node1, int node2) {
 		if(node1!=node2) {
 			int beamCookie = Simulator.addBeam(node1, node2);
 			if (beamCookie!=-99) {
-				ControlWindow.print("Created beam from node " + node1 + " to node " + node2);				
+				ControlWindow.print("Created beam from node " + node1 + " to node " + node2);
 			} else {
 				ControlWindow.print("Beam already exists");
 			}
@@ -240,9 +241,9 @@ implements MouseInputListener{
 			if (print) {
 				ControlWindow.print("Selected node " + node + " at "+foo[0] + ", " +foo[1]);
 			}
-		}		
+		}
 	}
-	
+
 	public static void highlightNode(int node) {
 		highLightNode = node;
 		if (node != -1) {
@@ -252,7 +253,7 @@ implements MouseInputListener{
 			ControlWindow.setInfoY(foo[1]);
 			ControlWindow.setInfoForce(foo[2]);
 			ControlWindow.setInfoAngle(Math.toDegrees(foo[3]));
-//			ControlWindow.setMovementSelect(Simulator.getNodeLinkType(highLightNode));			
+//			ControlWindow.setMovementSelect(Simulator.getNodeLinkType(highLightNode));
 		}
 	}
 
@@ -264,7 +265,7 @@ implements MouseInputListener{
 	public void mouseEntered(MouseEvent e) {}
 	@Override
 	public void mouseExited(MouseEvent e) {}
-	 
+
 	@Override
 	public void mouseDragged(MouseEvent e) {}
 
@@ -274,5 +275,5 @@ implements MouseInputListener{
 		double y=((WindowHeight-TOP_OFFSET-e.getY())/scale);
 		highlightNode(Simulator.findNode(x, y, searchRadius));
 		repaint();
-	}	
+	}
 }

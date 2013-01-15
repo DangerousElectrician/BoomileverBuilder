@@ -178,7 +178,7 @@ public class ControlWindow extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
-		gbl_contentPane.columnWidths = new int[] {978, -30, 0, 59, 35, 37, 55, 13};
+		gbl_contentPane.columnWidths = new int[] {978, -30, 0, 59, 35, 37, 66};
 		gbl_contentPane.rowHeights = new int[] {0, 58, 61, 38, 101, 48, 0, 15, -79, 100};
 		gbl_contentPane.columnWeights = new double[]{1.0, 1.0, 0.0, 0.0, 0.0};
 		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0};
@@ -220,7 +220,7 @@ public class ControlWindow extends JFrame {
 		gbc_tabbedPane.fill = GridBagConstraints.BOTH;
 		gbc_tabbedPane.gridheight = 5;
 		gbc_tabbedPane.gridwidth = 6;
-		gbc_tabbedPane.insets = new Insets(0, 0, 5, 5);
+		gbc_tabbedPane.insets = new Insets(0, 0, 5, 0);
 		gbc_tabbedPane.gridx = 1;
 		gbc_tabbedPane.gridy = 1;
 		contentPane.add(tabbedPane, gbc_tabbedPane);
@@ -578,7 +578,7 @@ public class ControlWindow extends JFrame {
 		panelModeSelect.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagConstraints gbc_panelModeSelect = new GridBagConstraints();
 		gbc_panelModeSelect.anchor = GridBagConstraints.NORTH;
-		gbc_panelModeSelect.gridwidth = 6;
+		gbc_panelModeSelect.gridwidth = 5;
 		gbc_panelModeSelect.insets = new Insets(0, 0, 5, 0);
 		gbc_panelModeSelect.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panelModeSelect.gridx = 2;
@@ -615,7 +615,7 @@ public class ControlWindow extends JFrame {
 		nodeInfo = new JPanel();
 		nodeInfo.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagConstraints gbc_nodeInfo = new GridBagConstraints();
-		gbc_nodeInfo.gridwidth = 7;
+		gbc_nodeInfo.gridwidth = 6;
 		gbc_nodeInfo.gridheight = 2;
 		gbc_nodeInfo.fill = GridBagConstraints.BOTH;
 		gbc_nodeInfo.gridx = 1;
@@ -632,12 +632,11 @@ public class ControlWindow extends JFrame {
 		infoDisp.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagConstraints gbc_infoDisp = new GridBagConstraints();
 		gbc_infoDisp.insets = new Insets(0, 0, 5, 5);
-		gbc_infoDisp.fill = GridBagConstraints.BOTH;
 		gbc_infoDisp.gridx = 1;
 		gbc_infoDisp.gridy = 0;
 		nodeInfo.add(infoDisp, gbc_infoDisp);
 		GridBagLayout gbl_infoDisp = new GridBagLayout();
-		gbl_infoDisp.columnWidths = new int[]{60, 35, 36, 32, 0};
+		gbl_infoDisp.columnWidths = new int[]{80, 35, 36, 32, 0};
 		gbl_infoDisp.rowHeights = new int[]{0, 14, 0, 0};
 		gbl_infoDisp.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gbl_infoDisp.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
