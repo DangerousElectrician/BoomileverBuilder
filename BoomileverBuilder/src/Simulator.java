@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 public class Simulator {
 
-	private static double[][] node; //x, y, force , angle, extra
+	private double[][] node; //x, y, force , angle, extra
 									//0  1	  2	     3		4
 
 	static final int X = 0;
@@ -12,19 +12,19 @@ public class Simulator {
 	static final int FORCE = 2;
 	static final int ANGLE = 3;
 
-	private static int [][] nodeTypeConnect; // all data the node stores in ints
+	private int [][] nodeTypeConnect; // all data the node stores in ints
 //	private static int nodeEntry=0;
 
-	private static LinkedList<LinkedList<Integer>> nodeLinkTypeConnect = new LinkedList<LinkedList<Integer>>();
+	private final LinkedList<LinkedList<Integer>> nodeLinkTypeConnect = new LinkedList<LinkedList<Integer>>();
 
-	private static double[][] beam; //node1, node2, force vector component x, force vector component y, vector, extra
+	private double[][] beam; //node1, node2, force vector component x, force vector component y, vector, extra
 //	private static int beamEntry=0;
 
-	private static LinkedList<double[]> nodeLink= new LinkedList<double[]>(); //x, y, force vector component x, force vector component y, type
+	private final LinkedList<double[]> nodeLink= new LinkedList<double[]>(); //x, y, force vector component x, force vector component y, type
 															   		  //0  1		2						3							4
-	private static LinkedList<Integer> specialNodes = new LinkedList<Integer>();
+	private final LinkedList<Integer> specialNodes = new LinkedList<Integer>();
 
-	private static LinkedList<double[]> beamLink= new LinkedList<double[]>();
+	private final LinkedList<double[]> beamLink= new LinkedList<double[]>();
 
 	static final int TYPE_DELETED = -1;
 	static final int TYPE_FREE_NODE = 0;
@@ -32,7 +32,11 @@ public class Simulator {
 	static final int TYPE_FIXED_X_NODE = 2;
 	static final int TYPE_FIXED_Y_NODE = 3;
 
-	static int addNode(double newNodeX, double newNodeY){
+	public Simulator() {
+
+	}
+
+	public int addNode(double newNodeX, double newNodeY){
 		nodeLink.add(new double[] {newNodeX,newNodeY,0,0,0});
 		LinkedList<Integer> cookieList = new LinkedList<Integer>();
 		cookieList.add(new Integer(0));
@@ -40,7 +44,11 @@ public class Simulator {
 		return (nodeLink.size()-1);
 	}
 
-	static void setNodeLinkType(int index, int type) {
+	public LinkedList<double[]> getNodeList() {
+		return nodeLink;
+	}
+
+	public void setNodeLinkType(int index, int type) {
 		try {
 			LinkedList<Integer> cookieList = nodeLinkTypeConnect.get(index);
 			cookieList.set(0, type);
@@ -49,7 +57,7 @@ public class Simulator {
 		}
 	}
 
-	static int getNodeLinkType(int index) {
+	public int getNodeLinkType(int index) {
 		return nodeLinkTypeConnect.get(index).get(0);
 	}
 /*
@@ -70,7 +78,7 @@ public class Simulator {
 
 	*/
 
-	static void setNodeLinkForce(int index, double force, double angle) {
+	public void setNodeLinkForce(int index, double force, double angle) {
 		double[] element = nodeLink.get(index);
 		element[2] = force;
 		element[3] = angle;
@@ -123,7 +131,7 @@ public class Simulator {
 		}
 	}
 	*/
-	static int findNode(double x, double y, double searchRadius) {
+	public int findNode(double x, double y, double searchRadius) {
 		int i=0;
 		for (double[] v : nodeLink) {
 			if(Math.sqrt((Math.pow(v[0]-x, 2)+Math.pow(v[1]-y, 2)))<=searchRadius) {
@@ -134,15 +142,15 @@ public class Simulator {
 		return -1;
 	}
 
-	static double getNodeX(int index) {
+	public double getNodeX(int index) {
 		return nodeLink.get(index)[0];
 	}
 
-	static double getNodeY(int index) {
+	public double getNodeY(int index) {
 		return nodeLink.get(index)[1];
 	}
 
-	static int addBeam(int node1, int node2) {
+	public int addBeam(int node1, int node2) {
 		if (isNotInList(node2, nodeLinkTypeConnect.get(node1))) {
 			beamLink.add(new double[] {node1, node2, 0,0,0,0});
 			LinkedList<Integer> cookieList = nodeLinkTypeConnect.get(node1);
@@ -156,7 +164,11 @@ public class Simulator {
 		return -99;
 	}
 
-	private static boolean isNotInList(int value, LinkedList<Integer> list) {
+	public LinkedList<double[]> getBeamList() {
+		return beamLink;
+	}
+
+	public static boolean isNotInList(int value, LinkedList<Integer> list) {
 		Iterator<Integer> brownie = list.iterator();
 		brownie.next();
 		while(brownie.hasNext()) {
@@ -167,33 +179,33 @@ public class Simulator {
 		return true;
 	}
 
-	static int getNodeLinkSize() {
+	public int getNodeLinkSize() {
 		return nodeLink.size();
 	}
 
-	static double getNodeLink(int index, int property) {
+	public double getNodeLink(int index, int property) {
 		return nodeLink.get(index)[property];
 	}
 
-	static double[] getNodeLinkArray(int index) {
+	public double[] getNodeLinkArray(int index) {
 		return nodeLink.get(index);
 	}
 
-	static double[] getBeamLink(int index) {
+	public double[] getBeamLink(int index) {
 		return beamLink.get(index);
 	}
 
-	static int getBeamLinkSize() {
+	public int getBeamLinkSize() {
 		return beamLink.size();
 	}
 
-	static void setNodeLink(int index, int property, double value) {
+	public void setNodeLink(int index, int property, double value) {
 		double[] cookie = nodeLink.get(index);
 		cookie[property] = value;
 		nodeLink.set(index, cookie);
 	}
 
-	static void toArray() {
+	public void toArray() {
 		beam=new double [beamLink.size()][];
 		int i = 0; for (double[] v : beamLink) beam[i++] = v;
 		node=new double [nodeLink.size()][];
@@ -229,7 +241,7 @@ public class Simulator {
 		return true;
 	}
 
-	static void toList() {
+	public void toList() {
 		nodeLink.clear();
 		nodeLinkTypeConnect.clear();
 		beamLink.clear();
@@ -244,11 +256,11 @@ public class Simulator {
 		}
 	}
 
-	static void deleteNode(int index) {
+	public void deleteNode(int index) {
 		setNodeLinkType(index, TYPE_DELETED);
 	}
 
-	static void simulate() {
+	public void simulate() {
 		toArray();
 		specialNodes.clear();
 		for (int i = 0; i < nodeTypeConnect.length; i++) {
@@ -310,14 +322,14 @@ public class Simulator {
 	    return newAngle;
 	}
 
-	static double angleToQ1(double angle) {
+	public static double angleToQ1(double angle) {
 		 double newAngle = angle;
 		 while (newAngle <= 0) newAngle += Math.PI/2;
 		 while (newAngle > Math.PI/2) newAngle -= Math.PI/2;
 		 return newAngle;
 	}
 
-	private static void printArray(double[] array) {
+	private void printArray(double[] array) {
 		/*for (int i = 0; i < array.length; i++) {
 			System.out.print(array[i]+" ");
 		}

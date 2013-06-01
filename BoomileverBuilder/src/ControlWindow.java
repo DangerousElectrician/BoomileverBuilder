@@ -14,7 +14,6 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -34,66 +33,68 @@ import org.eclipse.wb.swing.FocusTraversalOnArray;
 
 
 @SuppressWarnings("serial")
-public class ControlWindow extends JFrame {
+public class ControlWindow extends JPanel {
 
-	private JPanel contentPane;
-	
-	private static JTextArea textAreaOutput = new JTextArea();
-	private JRadioButton rdbtnAddNode;
-	private JRadioButton rdbtnAddBeam;
+	private final JPanel contentPane;
+
+	private final  JTextArea textAreaOutput = new JTextArea();
+	private final JRadioButton rdbtnAddNode;
+	private final JRadioButton rdbtnAddBeam;
 	private final ButtonGroup modeSelect = new ButtonGroup();
-	private JPanel panelModeSelect;
+	private final JPanel panelModeSelect;
 	private final JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-	private JPanel panelNode;
-	private JPanel panelBeam;
-	private JPanel panelActionLog;
-	private JPanel panelDraw;
-	private JPanel panelNodeCoords;
-	private JLabel lblX;
-	private JLabel lblY;
-	private static JSpinner spinX;
-	private static JSpinner spinY;
-	private JLabel lblNode;
-	private static JSpinner spinNode;
-	private JPanel panelNodeSelect;
-	
+	private final JPanel panelNode;
+	private final JPanel panelBeam;
+	private final JPanel panelActionLog;
+	private final JPanel panelDraw;
+	private final JPanel panelNodeCoords;
+	private final JLabel lblX;
+	private final JLabel lblY;
+	private final  JSpinner spinX;
+	private final  JSpinner spinY;
+	private final JLabel lblNode;
+	private final  JSpinner spinNode;
+	private final JPanel panelNodeSelect;
+
 	SpinnerModel spinModelDoubleX = new SpinnerNumberModel(new Double(0), null, null, 1);
 	SpinnerModel spinModelDoubleY = new SpinnerNumberModel(new Double(0), null, null, 1);
-	private JLabel lblForce;
-	private JLabel lblAngle;
-	private static JSpinner spinForce;
-	private static JSpinner spinAngle;
-	private JPanel panelNodeMovement;
-	private static JRadioButton rdbtnFixed;
-	private static JRadioButton rdbtnFixedX;
-	private static JRadioButton rdbtnFixedY;
-	private static JRadioButton rdbtnFree;
+	private final JLabel lblForce;
+	private final JLabel lblAngle;
+	private final  JSpinner spinForce;
+	private final  JSpinner spinAngle;
+	private final JPanel panelNodeMovement;
+	private final  JRadioButton rdbtnFixed;
+	private final  JRadioButton rdbtnFixedX;
+	private final  JRadioButton rdbtnFixedY;
+	private final  JRadioButton rdbtnFree;
 	private final ButtonGroup nodeMovement = new ButtonGroup();
-	private JButton btnDelete;
-	private JPanel panel;
-	private JLabel lblBeam;
-	private JSpinner spinner;
-	private JButton btnSimulate;
-	private JPanel nodeInfo;
-	private JPanel infoDisp;
-	private JLabel lblX_1;
-	private static JLabel lblXinfo;
-	private JLabel lblY_1;
-	private static JLabel lblYinfo;
-	private JLabel lblForce_1;
-	private JLabel lblAngle_1;
-	private static JLabel lblForceInfo;
-	private static JLabel lblAngleInfo;
-	private JLabel lblNode_1;
-	private static JLabel lblNodeInfo;
+	private final JButton btnDelete;
+	private final JPanel panel;
+	private final JLabel lblBeam;
+	private final JSpinner spinner;
+	private final JButton btnSimulate;
+	private final JPanel nodeInfo;
+	private final JPanel infoDisp;
+	private final JLabel lblX_1;
+	private final  JLabel lblXinfo;
+	private final JLabel lblY_1;
+	private final  JLabel lblYinfo;
+	private final JLabel lblForce_1;
+	private final JLabel lblAngle_1;
+	private final  JLabel lblForceInfo;
+	private final  JLabel lblAngleInfo;
+	private final JLabel lblNode_1;
+	private final  JLabel lblNodeInfo;
+
 
 	//begin methods
-	
-	public static void startControlGUI() {
+
+	public  void startControlGUI(final Simulator sim) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
-					ControlWindow frame = new ControlWindow();
+					ControlWindow frame = new ControlWindow(sim);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -101,112 +102,112 @@ public class ControlWindow extends JFrame {
 			}
 		});
 	}
-	
-	public static void print(String stuffToPrint) {
+
+	public  void print(String stuffToPrint) {
 		textAreaOutput.append("\n"+stuffToPrint);
 		textAreaOutput.setCaretPosition(textAreaOutput.getDocument().getLength());
 	}
-	
-	public static void setMovementSelect(int mode) {
+
+	public  void setMovementSelect(int mode) {
 		switch (mode) {
 		case Simulator.TYPE_FREE_NODE:
-			ControlWindow.rdbtnFree.doClick();
+			this.rdbtnFree.doClick();
 			break;
-			
+
 		case Simulator.TYPE_FIXED_NODE:
-			ControlWindow.rdbtnFixed.doClick();
+			this.rdbtnFixed.doClick();
 			break;
-			
+
 		case Simulator.TYPE_FIXED_X_NODE:
-			ControlWindow.rdbtnFixedX.doClick();
+			this.rdbtnFixedX.doClick();
 			break;
-			
+
 		case Simulator.TYPE_FIXED_Y_NODE:
-			ControlWindow.rdbtnFixedY.doClick();
+			this.rdbtnFixedY.doClick();
 			break;
 
 		default:
 			break;
 		}
 	}
-	
-	public static void setSpinNode(int node) {
+
+	public  void setSpinNode(int node) {
 		spinNode.setValue(new Integer(node));
 	}
-	
-	public static void setSpinX(double x) {
+
+	public  void setSpinX(double x) {
 		spinX.setValue(new Double(x));
 	}
-	
-	public static void setSpinY(double y) {
+
+	public  void setSpinY(double y) {
 		spinY.setValue(new Double(y));
 	}
 
-	public static void setSpinAngle(double angle) {
+	public  void setSpinAngle(double angle) {
 		spinAngle.setValue(new Double(Math.toDegrees(angle)));
 	}
-	
-	public static void setSpinForceX(double force) {
+
+	public  void setSpinForceX(double force) {
 		spinForce.setValue(new Double(force));
 	}
 
-	public static void setInfoX(double x) {
+	public  void setInfoX(double x) {
 		lblXinfo.setText(Double.toString(x));
 	}
-	
-	public static void setInfoY(double x) {
+
+	public  void setInfoY(double x) {
 		lblYinfo.setText(Double.toString(x));
 	}
-	
-	public static void setInfoForce(double x) {
+
+	public  void setInfoForce(double x) {
 		lblForceInfo.setText(Double.toString(x));
 	}
-	
-	public static void setInfoAngle(double x) {
+
+	public  void setInfoAngle(double x) {
 		lblAngleInfo.setText(Double.toString(x));
 	}
-	
-	public static void setInfoNode(int node) {
+
+	public  void setInfoNode(int node) {
 		lblNodeInfo.setText(Integer.toString(node));
 	}
-	
-	public ControlWindow() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+	public ControlWindow(final Simulator sim) {
+//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //		setBounds(0, 0, 1300, 700);
 		setBounds(0, 0, 1200, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
+//		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWidths = new int[] {978, -30, 0, 59, 35, 37, 66};
 		gbl_contentPane.rowHeights = new int[] {0, 58, 61, 38, 101, 48, 0, 15, -79, 100};
 		gbl_contentPane.columnWeights = new double[]{1.0, 1.0, 0.0, 0.0, 0.0};
 		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0};
 		contentPane.setLayout(gbl_contentPane);
-		
+
 		panelDraw = new OutputTest();
 		panelDraw.setBackground(Color.white);
 		panelDraw.addComponentListener(new ComponentListener() {
-			
+
 			@Override
 			public void componentShown(ComponentEvent e) {
-				
+
 			}
-			
+
 			@Override
 			public void componentResized(ComponentEvent e) {
 				OutputTest.WindowHeight=getHeight();
 				OutputTest.WindowWidth=getWidth();
 			}
-			
+
 			@Override
 			public void componentMoved(ComponentEvent e) {
-				
+
 			}
-			
+
 			@Override
 			public void componentHidden(ComponentEvent e) {
-				
+
 			}
 		});
 		GridBagConstraints gbc_panelDraw = new GridBagConstraints();
@@ -225,7 +226,7 @@ public class ControlWindow extends JFrame {
 		gbc_tabbedPane.gridy = 1;
 		contentPane.add(tabbedPane, gbc_tabbedPane);
 		tabbedPane.addChangeListener(new ChangeListener() {
-			
+
 			@Override
 			public void stateChanged(ChangeEvent c) {
 				switch (tabbedPane.getSelectedIndex()) {
@@ -234,9 +235,9 @@ public class ControlWindow extends JFrame {
 						rdbtnAddNode.doClick();
 					} catch (Exception e) {
 						//nothing
-					}					
+					}
 					break;
-					
+
 				case 1: //beam
 					rdbtnAddBeam.doClick();
 					break;
@@ -255,7 +256,7 @@ public class ControlWindow extends JFrame {
 		gbl_panelNode.columnWeights = new double[]{0.0, 1.0, 1.0, 0.0};
 		gbl_panelNode.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0};
 		panelNode.setLayout(gbl_panelNode);
-		
+
 		panelNodeSelect = new JPanel();
 		panelNodeSelect.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagConstraints gbc_panelNodeSelect = new GridBagConstraints();
@@ -270,7 +271,7 @@ public class ControlWindow extends JFrame {
 		gbl_panelNodeSelect.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
 		gbl_panelNodeSelect.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		panelNodeSelect.setLayout(gbl_panelNodeSelect);
-		
+
 		lblNode = new JLabel("Node");
 		lblNode.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		GridBagConstraints gbc_lblNode = new GridBagConstraints();
@@ -279,14 +280,14 @@ public class ControlWindow extends JFrame {
 		gbc_lblNode.gridx = 0;
 		gbc_lblNode.gridy = 0;
 		panelNodeSelect.add(lblNode, gbc_lblNode);
-		
+
 		spinNode = new JSpinner();
 		spinNode.addChangeListener(new ChangeListener() {
-			
+
 			@Override
 			public void stateChanged(ChangeEvent arg0) {
 				OutputTest.selectNodePrint(((Integer) spinNode.getValue()).intValue(), true);
-				
+
 			}
 		});
 		GridBagConstraints gbc_spinNode = new GridBagConstraints();
@@ -294,7 +295,7 @@ public class ControlWindow extends JFrame {
 		gbc_spinNode.gridx = 1;
 		gbc_spinNode.gridy = 0;
 		panelNodeSelect.add(spinNode, gbc_spinNode);
-		
+
 		panelNodeCoords = new JPanel();
 		panelNodeCoords.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagConstraints gbc_panelNodeCoords = new GridBagConstraints();
@@ -310,7 +311,7 @@ public class ControlWindow extends JFrame {
 		gbl_panelNodeCoords.columnWeights = new double[]{0.0, 1.0, 0.0, 1.0};
 		gbl_panelNodeCoords.rowWeights = new double[]{0.0, 0.0};
 		panelNodeCoords.setLayout(gbl_panelNodeCoords);
-		
+
 		lblX = new JLabel("X");
 		lblX.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		GridBagConstraints gbc_lblX = new GridBagConstraints();
@@ -319,13 +320,13 @@ public class ControlWindow extends JFrame {
 		gbc_lblX.gridx = 0;
 		gbc_lblX.gridy = 0;
 		panelNodeCoords.add(lblX, gbc_lblX);
-		
+
 		spinX = new JSpinner(spinModelDoubleX);
 		spinX.addChangeListener(new ChangeListener() {
-			
+
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				Simulator.setNodeLink(OutputTest.selectNode, Simulator.X ,((Double) spinX.getModel().getValue()).doubleValue());
+				sim.setNodeLink(OutputTest.selectNode, Simulator.X ,((Double) spinX.getModel().getValue()).doubleValue());
 				panelDraw.repaint();
 			}
 		});
@@ -335,7 +336,7 @@ public class ControlWindow extends JFrame {
 		gbc_spinX.gridx = 1;
 		gbc_spinX.gridy = 0;
 		panelNodeCoords.add(spinX, gbc_spinX);
-		
+
 		lblForce = new JLabel("Force");
 		lblForce.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		GridBagConstraints gbc_lblForce = new GridBagConstraints();
@@ -344,18 +345,18 @@ public class ControlWindow extends JFrame {
 		gbc_lblForce.gridx = 2;
 		gbc_lblForce.gridy = 0;
 		panelNodeCoords.add(lblForce, gbc_lblForce);
-		
+
 		spinForce = new JSpinner();
 		spinForce.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
 		spinForce.addChangeListener(new ChangeListener() {
-			
+
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				Simulator.setNodeLink(OutputTest.selectNode, Simulator.FORCE,((Double) spinForce.getModel().getValue()).doubleValue());
+				sim.setNodeLink(OutputTest.selectNode, Simulator.FORCE,((Double) spinForce.getModel().getValue()).doubleValue());
 				/*if (foo[4] == Simulator.FREE_NODE && foo[2] != 0) {
 					rdbtnFixed.doClick();
 				}*/
-				
+
 			}
 		});
 		GridBagConstraints gbc_spinForce = new GridBagConstraints();
@@ -364,7 +365,7 @@ public class ControlWindow extends JFrame {
 		gbc_spinForce.gridx = 3;
 		gbc_spinForce.gridy = 0;
 		panelNodeCoords.add(spinForce, gbc_spinForce);
-		
+
 		lblY = new JLabel("Y");
 		lblY.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		GridBagConstraints gbc_lblY = new GridBagConstraints();
@@ -373,13 +374,13 @@ public class ControlWindow extends JFrame {
 		gbc_lblY.gridx = 0;
 		gbc_lblY.gridy = 1;
 		panelNodeCoords.add(lblY, gbc_lblY);
-		
+
 		spinY = new JSpinner(spinModelDoubleY);
 		spinY.addChangeListener(new ChangeListener() {
-			
+
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				Simulator.setNodeLink(OutputTest.selectNode, Simulator.Y, ((Double) spinY.getModel().getValue()).doubleValue());
+				sim.setNodeLink(OutputTest.selectNode, Simulator.Y, ((Double) spinY.getModel().getValue()).doubleValue());
 				panelDraw.repaint();
 			}
 		});
@@ -389,7 +390,7 @@ public class ControlWindow extends JFrame {
 		gbc_spinY.gridx = 1;
 		gbc_spinY.gridy = 1;
 		panelNodeCoords.add(spinY, gbc_spinY);
-		
+
 		lblAngle = new JLabel("Angle");
 		lblAngle.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		GridBagConstraints gbc_lblAngle = new GridBagConstraints();
@@ -398,14 +399,14 @@ public class ControlWindow extends JFrame {
 		gbc_lblAngle.gridx = 2;
 		gbc_lblAngle.gridy = 1;
 		panelNodeCoords.add(lblAngle, gbc_lblAngle);
-		
+
 		spinAngle = new JSpinner();
 		spinAngle.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
 		spinAngle.addChangeListener(new ChangeListener() {
-			
+
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				Simulator.setNodeLink(OutputTest.selectNode, Simulator.ANGLE, (Math.toRadians((Double) spinAngle.getModel().getValue())));
+				sim.setNodeLink(OutputTest.selectNode, Simulator.ANGLE, (Math.toRadians((Double) spinAngle.getModel().getValue())));
 			}
 		});
 		GridBagConstraints gbc_spinAngle = new GridBagConstraints();
@@ -413,7 +414,7 @@ public class ControlWindow extends JFrame {
 		gbc_spinAngle.gridx = 3;
 		gbc_spinAngle.gridy = 1;
 		panelNodeCoords.add(spinAngle, gbc_spinAngle);
-		
+
 		panelNodeMovement = new JPanel();
 		panelNodeMovement.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagConstraints gbc_panelNodeMovement = new GridBagConstraints();
@@ -424,14 +425,14 @@ public class ControlWindow extends JFrame {
 		gbc_panelNodeMovement.gridy = 3;
 		panelNode.add(panelNodeMovement, gbc_panelNodeMovement);
 		panelNodeMovement.setLayout(new GridLayout(0, 2, 0, 0));
-		
+
 		rdbtnFree = new JRadioButton("Free");
 		rdbtnFree.setMnemonic('f');
 		rdbtnFree.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Simulator.setNodeLinkType(OutputTest.selectNode, Simulator.TYPE_FREE_NODE);
+				sim.setNodeLinkType(OutputTest.selectNode, Simulator.TYPE_FREE_NODE);
 				panelDraw.repaint();
 			}
 		});
@@ -439,53 +440,53 @@ public class ControlWindow extends JFrame {
 		rdbtnFree.doClick();
 		nodeMovement.add(rdbtnFree);
 		panelNodeMovement.add(rdbtnFree);
-		
+
 		rdbtnFixed = new JRadioButton("Fixed");
 		rdbtnFixed.setMnemonic('x');
 		rdbtnFixed.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Simulator.setNodeLinkType(OutputTest.selectNode, Simulator.TYPE_FIXED_NODE);
-				panelDraw.repaint();				
+				sim.setNodeLinkType(OutputTest.selectNode, Simulator.TYPE_FIXED_NODE);
+				panelDraw.repaint();
 			}
 		});
 		rdbtnFixed.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		nodeMovement.add(rdbtnFixed);
 		panelNodeMovement.add(rdbtnFixed);
-		
+
 		rdbtnFixedX = new JRadioButton("Fixed X");
 		rdbtnFixedX.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Simulator.setNodeLinkType(OutputTest.selectNode, Simulator.TYPE_FIXED_X_NODE);
-				panelDraw.repaint();				
+				sim.setNodeLinkType(OutputTest.selectNode, Simulator.TYPE_FIXED_X_NODE);
+				panelDraw.repaint();
 			}
 		});
 		rdbtnFixedX.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		nodeMovement.add(rdbtnFixedX);
 		panelNodeMovement.add(rdbtnFixedX);
-		
+
 		rdbtnFixedY = new JRadioButton("Fixed Y");
 		rdbtnFixedY.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Simulator.setNodeLinkType(OutputTest.selectNode, Simulator.TYPE_FIXED_Y_NODE);
+				sim.setNodeLinkType(OutputTest.selectNode, Simulator.TYPE_FIXED_Y_NODE);
 				panelDraw.repaint();
 			}
 		});
 		rdbtnFixedY.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		nodeMovement.add(rdbtnFixedY);
 		panelNodeMovement.add(rdbtnFixedY);
-		
+
 		btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Simulator.deleteNode(OutputTest.selectNode);
+				sim.deleteNode(OutputTest.selectNode);
 				panelDraw.repaint();
 			}
 		});
@@ -495,7 +496,7 @@ public class ControlWindow extends JFrame {
 		gbc_btnDelete.gridx = 1;
 		gbc_btnDelete.gridy = 4;
 		panelNode.add(btnDelete, gbc_btnDelete);
-		
+
 		panelBeam = new JPanel();
 		tabbedPane.addTab("Beam", null, panelBeam, null);
 		GridBagLayout gbl_panelBeam = new GridBagLayout();
@@ -504,7 +505,7 @@ public class ControlWindow extends JFrame {
 		gbl_panelBeam.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gbl_panelBeam.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panelBeam.setLayout(gbl_panelBeam);
-		
+
 		panel = new JPanel();
 		panel.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagConstraints gbc_panel = new GridBagConstraints();
@@ -519,14 +520,14 @@ public class ControlWindow extends JFrame {
 		gbl_panel.columnWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
 		gbl_panel.rowWeights = new double[]{0.0, Double.MIN_VALUE};
 		panel.setLayout(gbl_panel);
-		
+
 		lblBeam = new JLabel("Beam");
 		GridBagConstraints gbc_lblBeam = new GridBagConstraints();
 		gbc_lblBeam.insets = new Insets(0, 0, 0, 5);
 		gbc_lblBeam.gridx = 0;
 		gbc_lblBeam.gridy = 0;
 		panel.add(lblBeam, gbc_lblBeam);
-		
+
 		spinner = new JSpinner();
 		GridBagConstraints gbc_spinner = new GridBagConstraints();
 		gbc_spinner.fill = GridBagConstraints.HORIZONTAL;
@@ -534,7 +535,7 @@ public class ControlWindow extends JFrame {
 		gbc_spinner.gridy = 0;
 		panel.add(spinner, gbc_spinner);
 		tabbedPane.setMnemonicAt(1, KeyEvent.VK_B);
-		
+
 		panelActionLog = new JPanel();
 		tabbedPane.addTab("Log", null, panelActionLog, null);
 		GridBagLayout gbl_panelActionLog = new GridBagLayout();
@@ -543,7 +544,7 @@ public class ControlWindow extends JFrame {
 		gbl_panelActionLog.columnWeights = new double[]{1.0, Double.MIN_VALUE};
 		gbl_panelActionLog.rowWeights = new double[]{1.0, Double.MIN_VALUE};
 		panelActionLog.setLayout(gbl_panelActionLog);
-		
+
 
 		JScrollPane scrollPaneOutput = new JScrollPane(textAreaOutput);
 		GridBagConstraints gbc_scrollPaneOutput = new GridBagConstraints();
@@ -555,17 +556,20 @@ public class ControlWindow extends JFrame {
 		textAreaOutput.setRows(3);
 		textAreaOutput.setFont(new Font("Monospaced", Font.PLAIN, 12));
 		textAreaOutput.setEditable(false);
-		
+
+		panelModeSelect = new JPanel();
+		rdbtnAddNode = new JRadioButton("Add Node");
+		rdbtnAddBeam = new JRadioButton("Add Beam");
 				contentPane.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{tabbedPane, panelModeSelect, rdbtnAddNode, rdbtnAddBeam, scrollPaneOutput, textAreaOutput}));
-		
+
 		btnSimulate = new JButton("Simulate");
 		btnSimulate.setMnemonic('a');
 		btnSimulate.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Simulator.simulate();
-				
+				sim.simulate();
+
 			}
 		});
 		GridBagConstraints gbc_btnSimulate = new GridBagConstraints();
@@ -573,8 +577,7 @@ public class ControlWindow extends JFrame {
 		gbc_btnSimulate.gridx = 3;
 		gbc_btnSimulate.gridy = 6;
 		contentPane.add(btnSimulate, gbc_btnSimulate);
-		
-		panelModeSelect = new JPanel();
+
 		panelModeSelect.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagConstraints gbc_panelModeSelect = new GridBagConstraints();
 		gbc_panelModeSelect.anchor = GridBagConstraints.NORTH;
@@ -584,34 +587,32 @@ public class ControlWindow extends JFrame {
 		gbc_panelModeSelect.gridx = 2;
 		gbc_panelModeSelect.gridy = 7;
 		contentPane.add(panelModeSelect, gbc_panelModeSelect);
-		
-		rdbtnAddNode = new JRadioButton("Add Node");
+
 		rdbtnAddNode.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		panelModeSelect.add(rdbtnAddNode);
 		modeSelect.add(rdbtnAddNode);
-		
-		rdbtnAddBeam = new JRadioButton("Add Beam");
+
 		rdbtnAddBeam.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		panelModeSelect.add(rdbtnAddBeam);
-		modeSelect.add(rdbtnAddBeam);		
+		modeSelect.add(rdbtnAddBeam);
 		rdbtnAddBeam.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				OutputTest.mode=2;
-				
+
 			}
 		});
 		rdbtnAddNode.doClick();
 		rdbtnAddNode.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				OutputTest.mode=1;
-				
+
 			}
 		});
-		
+
 		nodeInfo = new JPanel();
 		nodeInfo.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagConstraints gbc_nodeInfo = new GridBagConstraints();
@@ -627,7 +628,7 @@ public class ControlWindow extends JFrame {
 		gbl_nodeInfo.columnWeights = new double[]{0.0, 1.0, 0.0, Double.MIN_VALUE};
 		gbl_nodeInfo.rowWeights = new double[]{1.0, 0.0, Double.MIN_VALUE};
 		nodeInfo.setLayout(gbl_nodeInfo);
-		
+
 		infoDisp = new JPanel();
 		infoDisp.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		GridBagConstraints gbc_infoDisp = new GridBagConstraints();
@@ -641,7 +642,7 @@ public class ControlWindow extends JFrame {
 		gbl_infoDisp.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		gbl_infoDisp.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
 		infoDisp.setLayout(gbl_infoDisp);
-		
+
 		lblNode_1 = new JLabel("Node: ");
 		lblNode_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		GridBagConstraints gbc_lblNode_1 = new GridBagConstraints();
@@ -650,7 +651,7 @@ public class ControlWindow extends JFrame {
 		gbc_lblNode_1.gridx = 0;
 		gbc_lblNode_1.gridy = 0;
 		infoDisp.add(lblNode_1, gbc_lblNode_1);
-		
+
 		lblNodeInfo = new JLabel("0");
 		lblNodeInfo.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		GridBagConstraints gbc_lblNodeInfo = new GridBagConstraints();
@@ -659,7 +660,7 @@ public class ControlWindow extends JFrame {
 		gbc_lblNodeInfo.gridx = 1;
 		gbc_lblNodeInfo.gridy = 0;
 		infoDisp.add(lblNodeInfo, gbc_lblNodeInfo);
-		
+
 		lblX_1 = new JLabel("X: ");
 		lblX_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		GridBagConstraints gbc_lblX_1 = new GridBagConstraints();
@@ -668,7 +669,7 @@ public class ControlWindow extends JFrame {
 		gbc_lblX_1.gridx = 0;
 		gbc_lblX_1.gridy = 1;
 		infoDisp.add(lblX_1, gbc_lblX_1);
-		
+
 		lblXinfo = new JLabel("0");
 		lblXinfo.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		GridBagConstraints gbc_lblXinfo = new GridBagConstraints();
@@ -677,7 +678,7 @@ public class ControlWindow extends JFrame {
 		gbc_lblXinfo.gridx = 1;
 		gbc_lblXinfo.gridy = 1;
 		infoDisp.add(lblXinfo, gbc_lblXinfo);
-		
+
 		lblForce_1 = new JLabel("Force: ");
 		lblForce_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		GridBagConstraints gbc_lblForce_1 = new GridBagConstraints();
@@ -686,7 +687,7 @@ public class ControlWindow extends JFrame {
 		gbc_lblForce_1.gridx = 2;
 		gbc_lblForce_1.gridy = 1;
 		infoDisp.add(lblForce_1, gbc_lblForce_1);
-		
+
 		lblForceInfo = new JLabel("0");
 		lblForceInfo.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		GridBagConstraints gbc_lblForceInfo = new GridBagConstraints();
@@ -695,7 +696,7 @@ public class ControlWindow extends JFrame {
 		gbc_lblForceInfo.gridx = 3;
 		gbc_lblForceInfo.gridy = 1;
 		infoDisp.add(lblForceInfo, gbc_lblForceInfo);
-		
+
 		lblY_1 = new JLabel("Y: ");
 		lblY_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		GridBagConstraints gbc_lblY_1 = new GridBagConstraints();
@@ -704,7 +705,7 @@ public class ControlWindow extends JFrame {
 		gbc_lblY_1.gridx = 0;
 		gbc_lblY_1.gridy = 2;
 		infoDisp.add(lblY_1, gbc_lblY_1);
-		
+
 		lblYinfo = new JLabel("0");
 		lblYinfo.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		GridBagConstraints gbc_lblYinfo = new GridBagConstraints();
@@ -713,7 +714,7 @@ public class ControlWindow extends JFrame {
 		gbc_lblYinfo.gridx = 1;
 		gbc_lblYinfo.gridy = 2;
 		infoDisp.add(lblYinfo, gbc_lblYinfo);
-		
+
 		lblAngle_1 = new JLabel("Angle: ");
 		lblAngle_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		GridBagConstraints gbc_lblAngle_1 = new GridBagConstraints();
@@ -722,7 +723,7 @@ public class ControlWindow extends JFrame {
 		gbc_lblAngle_1.gridx = 2;
 		gbc_lblAngle_1.gridy = 2;
 		infoDisp.add(lblAngle_1, gbc_lblAngle_1);
-		
+
 		lblAngleInfo = new JLabel("0");
 		lblAngleInfo.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		GridBagConstraints gbc_lblAngleInfo = new GridBagConstraints();
