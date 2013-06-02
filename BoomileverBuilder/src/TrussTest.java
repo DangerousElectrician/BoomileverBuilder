@@ -7,24 +7,24 @@ public class TrussTest {
 
 		Truss truss = new Truss();
 		TrussGA ga = new TrussGA();
-		LinkedList<TrussGA.TrussGene> viableTrussGene = new LinkedList<TrussGA.TrussGene>();
+		LinkedList<TrussGA.TrussChromo> viableTrussGene = new LinkedList<TrussGA.TrussChromo>();
 		LinkedList<Truss> viableTruss = new LinkedList<Truss>();
-		System.out.println("n 0 0 1 0 0 1 b 0 1 1 2 2 0 f 2 y 0 l 1 5 -1.570796326794897 p");
+
+		/*System.out.println("n 0 0 1 0 0 1 b 0 1 1 2 2 0 f 2 y 0 l 1 5 -1.570796326794897 p");
 		System.out.println(ga.fitness("n 0 0 1 0 0 1 b 0 1 1 2 2 0 f 2 y 0 l 1 5 -1.570796326794897 p", truss));
 		System.out.println("n 0 0 0 14 43 0 f 1 y 0 l 2 15 -1.570796326794897 b 0 1 1 2 2 0 p");
 		truss = new Truss();
 		System.out.println(ga.fitness("n 0 0 0 14 43 0 f 1 y 0 l 2 15 -1.570796326794897 b 0 1 1 2 2 0 p", truss));
-		System.out.println();
+		System.out.println();*/
 
 		for (int i = 0; i < 54; i++) {
 			while (true) {
-				TrussGA.TrussGene tgene = ga.generateTruss();
-				String trussString = tgene.toString();
-				System.out.println(trussString);
+				TrussGA.TrussChromo tgene = ga.generateTruss();
+//				System.out.println(trussString);
 				truss = new Truss();
-				tgene.fitness = ga.fitness(trussString, truss);
-				System.out.println(tgene.fitness);
-				if (tgene.fitness < Double.MAX_VALUE) {
+				tgene.fitness = ga.fitness(tgene, truss);
+//				System.out.println(tgene.fitness);
+				if (tgene.fitness < 200) {
 					viableTrussGene.add(tgene);
 					viableTruss.add(truss);
 					break;
@@ -40,7 +40,7 @@ public class TrussTest {
 //		}
 
 		int index = 0;
-		for (TrussGA.TrussGene trussFitness : viableTrussGene) {
+		for (TrussGA.TrussChromo trussFitness : viableTrussGene) {
 			System.out.println("index: "+index+++"\t"+trussFitness);
 //			out.println(trussFitness);
 		}

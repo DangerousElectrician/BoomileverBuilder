@@ -13,7 +13,7 @@ public class TrussDisplay extends JFrame{
 	static int searchRadius = 8;
 
 	static double scale=2;
-	static int circleSize=8;
+	static int circleSize=4;
 	static int circleCenter=circleSize/2;
 	static int circleSelectSize=12;
 	static int circleSelectCenter=circleSelectSize/2;

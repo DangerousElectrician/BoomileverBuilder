@@ -3,7 +3,7 @@ import java.util.LinkedList;
 
 
 public class PrintList {
-	
+
 	/**Prints an array on a single line with each element delimited by a tab
 	 * @param array
 	 */
@@ -14,7 +14,7 @@ public class PrintList {
 		}
 		System.out.println();
 	}
-	
+
 	/**Prints a multidimensional array with each sub-array delimited by a new line
 	 * @param array
 	 */
@@ -24,7 +24,7 @@ public class PrintList {
 		}
 		System.out.println();
 	}
-	
+
 	/**Prints a list on a single line with each element delimited by a tab
 	 * @param list
 	 */
@@ -34,7 +34,7 @@ public class PrintList {
 		}
 		System.out.println();
 	}
-	
+
 	/**Prints a multidimensional list with each sub-list delimited by a new line
 	 * @param list
 	 */
@@ -44,8 +44,8 @@ public class PrintList {
 		}
 		System.out.println();
 	}
-	
-	
+
+
 	/**Prints a list on a single line with each element delimited by a tab
 	 * @param list
 	 */
@@ -55,7 +55,7 @@ public class PrintList {
 		}
 		System.out.println();
 	}
-	
+
 	/**Prints a multidimensional list with each sub-list delimited by a new line
 	 * @param list
 	 */

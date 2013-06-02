@@ -7,22 +7,25 @@ public class TrussGA {
 	public String required = "n 0 0 0 14 43 0 f 1 y 0 l 2 147.09 -1.570796326794897 "; //15kg load
 	private static Random rand = new Random(19);
 
-	public double fitness(String trussString, Truss truss) {
+	public double fitness(TrussChromo trussChromo, Truss truss) {
 		try {
-			TrussInterpreter.interpret(truss, trussString);
+			TrussInterpreter.interpret(truss, trussChromo.toString());
+			trussChromo.beamString = truss.cleanBeamString();
 			LinkedList<Truss.Node> nodeList = truss.getNodeList();
+			if((nodeList.size()*2) != (truss.getBeamList().size() + 3)) return Double.MAX_VALUE;
 			double totalLength = 0;
-			double totalTension = 0;
-			double totalCompression = 0;
+			//double totalTension = 0;
+			//double totalCompression = 0;
 			for(Truss.Beam beam : truss.getBeamList()) {
-				if (beam.f>0) totalTension += beam.f;
-				else if (beam.f<0) totalCompression -= beam.f;
+				if (Double.isNaN(beam.f) | Double.isInfinite(beam.f)) return Double.MAX_VALUE;
+				if (beam.f>500) return Double.MAX_VALUE; //totalTension += beam.f;  //balsa breaking tension
+				else if (beam.f<-1*500) return Double.MAX_VALUE;//totalCompression -= beam.f; //balsa breaking compression
 				if(Math.abs(beam.f) > 1470) { //method of joints sometimes gives results for indeterminate case
 					return Double.MAX_VALUE;
 				}
 				totalLength += beam.getLength(nodeList);
 			}
-			double fitness = (totalLength*totalLength+(totalTension+totalCompression))/(totalTension-totalCompression);
+			double fitness = totalLength; // (totalLength*totalLength+(totalTension+totalCompression))/(totalTension-totalCompression);
 			if (fitness>0) { //check for compression. if more compression than tension, the truss fails
 				return fitness;
 			}
@@ -32,10 +35,10 @@ public class TrussGA {
 		return Double.MAX_VALUE;
 	}
 
-	public TrussGA.TrussGene generateTruss() {
+	public TrussGA.TrussChromo generateTruss() {
 		int nodeCnt = 2;
 		String nodeString = "";
-		String beamString = "";
+		String beamString = ""; //0 1 1 2 2 0
 		for (int i = 0; i < rand.nextInt(31)+1; i++) {
 			nodeString = nodeString.concat(rand.nextInt(46)+" ");
 			nodeString = nodeString.concat(rand.nextInt(16)+" ");
@@ -53,15 +56,15 @@ public class TrussGA {
 				beamString = beamString.concat(n2+" ");
 			}
 		}
-		return new TrussGene(nodeString, beamString, 0);
+		return new TrussChromo(nodeString, beamString, 0);
 	}
 
-	public class TrussGene {
+	public class TrussChromo {
 		public String nodeString;
 		public String beamString;
 		public double fitness;
 
-		public TrussGene(String nodeString, String beamString, double fitness) {
+		public TrussChromo(String nodeString, String beamString, double fitness) {
 			this.nodeString = nodeString;
 			this.beamString= beamString;
 			this.fitness = fitness;

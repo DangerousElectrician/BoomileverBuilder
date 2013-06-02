@@ -24,6 +24,14 @@ public class Truss {
 		this.beamHashList = new LinkedList<Beam>(truss.getBeamHashList());
 	}
 
+	public String cleanBeamString() {
+		String beamString = "";
+		for (Beam beam: beamList) {
+			beamString = beamString.concat(beam.n1+" "+beam.n2+" ");
+		}
+		return beamString;
+	}
+
 	public void addNode(double x, double y) {
 		nodeList.add(new Node(x,y,nodeList.size()));
 	}
