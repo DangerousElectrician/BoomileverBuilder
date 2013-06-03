@@ -8,7 +8,7 @@ public class PrintList {
 	 * @param array
 	 */
 	public static void p(double[] array) {
-		DecimalFormat df = new DecimalFormat("#.####");
+		DecimalFormat df = new DecimalFormat("#.##");
 		for (int i = 0; i < array.length; i++) {
 			System.out.print(df.format(array[i])+"\t");
 		}

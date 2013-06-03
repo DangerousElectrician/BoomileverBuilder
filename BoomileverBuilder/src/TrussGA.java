@@ -14,21 +14,16 @@ public class TrussGA {
 			LinkedList<Truss.Node> nodeList = truss.getNodeList();
 			if((nodeList.size()*2) != (truss.getBeamList().size() + 3)) return Double.MAX_VALUE;
 			double totalLength = 0;
-			//double totalTension = 0;
-			//double totalCompression = 0;
 			for(Truss.Beam beam : truss.getBeamList()) {
 				if (Double.isNaN(beam.f) | Double.isInfinite(beam.f)) return Double.MAX_VALUE;
-				if (beam.f>500) return Double.MAX_VALUE; //totalTension += beam.f;  //balsa breaking tension
-				else if (beam.f<-1*500) return Double.MAX_VALUE;//totalCompression -= beam.f; //balsa breaking compression
+				if (beam.f*beam.getLength(nodeList)>50000) return Double.MAX_VALUE; //balsa breaking tension
+				else if (beam.f*beam.getLength(nodeList)<-1*30000) return Double.MAX_VALUE; //balsa breaking compression
 				if(Math.abs(beam.f) > 1470) { //method of joints sometimes gives results for indeterminate case
 					return Double.MAX_VALUE;
 				}
 				totalLength += beam.getLength(nodeList);
 			}
-			double fitness = totalLength; // (totalLength*totalLength+(totalTension+totalCompression))/(totalTension-totalCompression);
-			if (fitness>0) { //check for compression. if more compression than tension, the truss fails
-				return fitness;
-			}
+			return totalLength;
 		} catch (Exception e) {
 			// fail any truss that does throws an exception
 		}
@@ -45,8 +40,19 @@ public class TrussGA {
 			nodeCnt++;
 		}
 
+		/*for (int j = 0; j < (nodeCnt*2)-3; j++) {
+			int n1 = rand.nextInt(nodeCnt+1);
+			int n2;
+			do {
+				n2 = rand.nextInt(nodeCnt+1);
+			} while (n1 == n2);
+
+			beamString = beamString.concat(n1+" ");
+			beamString = beamString.concat(n2+" ");
+		}*/
+
 		for (int n1 = 0; n1 < nodeCnt+1; n1++) {
-			for (int i = 0; i < 2*(rand.nextInt(7)); i++) {
+			for (int i = 0; i < 2*(rand.nextInt(7))+1; i++) {
 				int n2;
 				do {
 					n2 = rand.nextInt(nodeCnt+1);
